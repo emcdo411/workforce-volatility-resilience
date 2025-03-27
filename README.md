@@ -163,6 +163,142 @@ ggplot(resilience, aes(x = Industry, y = Resilience, fill = Industry)) +
   theme_minimal() +
   labs(title = "Resilience of Employment by Industry", x = "Industry", y = "Resilience (Average Hires)")
 ```
+Certainly! Below is how you can update your **GitHub README** file with the latest code (the interactive plot using `plotly`) along with an explanation.
+
+### GitHub README Template:
+
+```markdown
+# Employment Data Analysis and Forecasting
+
+## Objective:
+This repository contains an analysis and forecasting of employment data, with a focus on hiring trends in the healthcare industry in Texas. Using publicly available data (e.g., JOLTS and BLS), the goal is to simulate and forecast hiring trends, identify volatility and resilience across industries, and provide policy insights based on the findings.
+
+### Contents:
+- Simulated data generation for employment trends
+- Time series forecasting using ARIMA model
+- Interactive plot to visualize employment trends and forecast
+- Forecasting future hiring trends and providing insights for workforce development
+
+## Setup and Installation:
+
+### Install Required Packages:
+```r
+install.packages("forecast")
+install.packages("ggplot2")
+install.packages("plotly")
+```
+
+### Load Libraries:
+```r
+library(forecast)
+library(ggplot2)
+library(plotly)
+```
+
+## Analysis: Healthcare Hiring Trends in Texas (2005-2026)
+
+The dataset simulates healthcare hiring trends in Texas from 2005 to 2024. We use the ARIMA model to forecast hiring rates from 2025 to 2026, and create an interactive plot using `plotly` to allow the audience to explore trends visually.
+
+### Data Simulation:
+We generated simulated data with seasonality to represent monthly healthcare hiring rates, which are then used to fit an ARIMA model for forecasting.
+
+### Forecasting Hiring Trends:
+We used the ARIMA model to generate forecasts for the years 2025 and 2026 based on historical data.
+
+### Interactive Plot:
+Here’s how the data and forecast are visualized interactively using `plotly`.
+
+```r
+# Load necessary libraries
+library(forecast)
+library(ggplot2)
+library(plotly)
+
+# Simulated job market data for Texas (Healthcare example)
+set.seed(123)
+year <- rep(2005:2024, each = 12)  # Years from 2005 to 2024
+month <- rep(1:12, times = 20)     # 12 months per year
+
+# Generating some random data for hiring rates
+hiring_rate <- runif(240, min = 1, max = 5) + sin(1:240 / 20)  # Add some seasonality
+
+# Create a data frame
+data <- data.frame(
+  Year = year,
+  Month = month,
+  HiringRate = hiring_rate
+)
+
+# Create a time series object
+ts_data <- ts(data$HiringRate, start = c(2005, 1), frequency = 12)
+
+# Fit a model (ARIMA model)
+fit <- auto.arima(ts_data)
+
+# Forecast future hiring trends from 2025 to 2026
+forecast_data <- forecast(fit, h = 24)
+
+# Combine historical and forecast data into one data frame for plotting
+plot_data <- data.frame(
+  Date = c(time(ts_data), time(forecast_data$mean)),
+  HiringRate = c(ts_data, forecast_data$mean),
+  Type = c(rep("Historical", length(ts_data)), rep("Forecast", length(forecast_data$mean)))
+)
+
+# Create an interactive plot with plotly
+p <- ggplot(plot_data, aes(x = Date, y = HiringRate, color = Type)) +
+  geom_line(size = 1.5) +
+  geom_point(aes(text = paste("Date: ", Date, "<br>Hiring Rate: ", round(HiringRate, 2))), size = 2) +
+  labs(
+    title = "Healthcare Hiring Rate Forecast for Texas (2005-2026)",
+    x = "Year",
+    y = "Hiring Rate (%)"
+  ) +
+  theme_minimal()
+
+# Convert to interactive plot with plotly
+interactive_plot <- ggplotly(p, tooltip = "text")
+
+# Show the interactive plot
+interactive_plot
+```
+
+### Interactive Plot Features:
+- **Hover over the points**: When you hover over any point in the plot, you will see detailed information about the **date** and the **hiring rate**.
+- **Interactive exploration**: Zoom in, zoom out, and pan across the plot to explore trends more effectively.
+- **Forecasting**: The plot shows both historical data and forecasted trends, allowing for an easy comparison.
+
+### Why This Matters:
+Understanding employment trends and forecasting future job openings is crucial for workforce development. By analyzing hiring patterns, we can:
+- **Identify industries with the most volatility** (where employment fluctuates rapidly).
+- **Highlight industries with the most resilience** (where employment remains stable).
+- **Forecast hiring trends** to help businesses, educational institutions, and policymakers plan for future workforce needs.
+
+## Conclusion:
+This analysis provides valuable insights into healthcare hiring trends in Texas, identifying periods of growth, downturns, and forecasting hiring patterns through 2026. The interactive plot enables stakeholders to explore the data and understand the trends better.
+
+## Future Work:
+- Extend the analysis to other industries and regions.
+- Include additional factors such as demographic data, education levels, and regional economic conditions to enhance the forecasting model.
+- Provide actionable workforce development strategies based on findings.
+
+## License:
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+
+### What’s Included in the Updated README:
+- **Objective**: A clear statement about the project’s goal.
+- **Setup Instructions**: Instructions on how to install and load necessary packages.
+- **Code**: The R code that generates the interactive plot and performs forecasting with the ARIMA model.
+- **Interactive Plot Features**: Explanation of how users can interact with the plot.
+- **Why This Matters**: Context for the analysis and its significance.
+- **Conclusion**: Summary of findings and potential future work.
+
+### Suggested Repository Name:
+- `Healthcare-Employment-Analysis-Texas`
+- `Employment-Trends-Analysis-and-Forecasting`
+- `JOLTS-and-BLS-Data-Visualization`
 
 ## **Conclusion**
 
